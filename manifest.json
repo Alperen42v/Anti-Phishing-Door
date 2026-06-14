@@ -33,7 +33,10 @@
   ],
   "browser_specific_settings": {
     "gecko": {
-      "id": "anti-phishing-door@alperen42v.github.io"
+      "id": "anti-phishing-door@alperen42v.github.io",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
     }
   }
 }
