@@ -1,0 +1,13 @@
+{
+	"extName": { "message": "Anti-Phishing-Door" },
+	"extDesc": { "message": "Zero Trust Whitelist tabanlı anti-phishing kalkanı." },
+	"alertMsg": { "message": "⚠️ BEYAZ LİSTEDE GÖREMİYORUM! GİRİLSİN Mİ?" },
+	"urlBox": { "message": "Şu adrese gitmeye çalışıyorsun:" },
+	"rulesTitle": { "message": "Güvenlik Kontrolü (3 Altın Kural):" },
+	"rule1": { "message": "1. Alan adında harf hilesi var mı? (Örn: g00gle.com)" },
+	"rule2": { "message": "2. Beklediğin sayfa gerçekten bu mu?" },
+	"rule3": { "message": "3. SSL sertifikası (HTTPS) var mı ve geçerli mi?" },
+	"btnBack": { "message": "Güvenli Bölgeye Dön" },
+	"btnProceed": { "message": "Yine de Git (Riski Kabul Ediyorum)" },
+	"unknownUrl": { "message": "Bilinmeyen Adres" }
+}

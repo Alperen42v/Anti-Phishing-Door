@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Anti-Phishing-Door | Erişim Engellendi</title>
+  <style>
+	body { background-color: #1e1e2e; color: #cdd6f4; font-family: monospace; text-align: center; padding: 50px; }
+	.alert { color: #f38ba8; font-size: 28px; font-weight: bold; margin-bottom: 20px;}
+	.url-box { background: #313244; padding: 15px; margin: 20px auto; width: 60%; border-radius: 8px; border: 1px solid #f38ba8; }
+	#target-url { color: #a6e3a1; font-size: 18px; word-break: break-all; }
+	.rules { text-align: left; display: inline-block; background: #181825; padding: 25px; border-radius: 8px; margin-top: 20px;}
+	.rules h3 { color: #f9e2af; margin-top: 0;}
+	.rules li { margin-bottom: 10px; font-size: 16px;}
+	button { background: #89b4fa; color: #11111b; border: none; padding: 12px 24px; cursor: pointer; font-weight: bold; margin: 20px 10px; border-radius: 4px;}
+	button.danger { background: #f38ba8; }
+	button:hover { opacity: 0.8; }
+  </style>
+</head>
+<body>
+<div class="alert" id="alertMsg"></div>
+  
+  <div class="url-box">
+	<span id="urlBox"></span><br><br>
+	<span id="target-url"></span>
+  </div>
+
+  <div class="rules">
+	<h3 id="rulesTitle"></h3>
+	<ul>
+	  <li id="rule1"></li>
+	  <li id="rule2"></li>
+	  <li id="rule3"></li>
+	</ul>
+  </div>
+  
+  <br>
+  <button id="go-back"></button>
+  <button id="proceed" class="danger"></button>
+
+  <script src="block.js"></script>
+
+</body>
+</html>

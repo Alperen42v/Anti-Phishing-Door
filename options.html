@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Anti-Phishing-Door | Settings</title>
+  <style>
+    body { background-color: #1e1e2e; color: #cdd6f4; font-family: monospace; padding: 30px; text-align: center; }
+    h2 { color: #f9e2af; }
+    input { background: #313244; color: #cdd6f4; border: 1px solid #89b4fa; padding: 10px; width: 250px; border-radius: 4px; }
+    button { background: #89b4fa; color: #11111b; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 4px; margin-left: 10px; }
+    button:hover { opacity: 0.8; }
+    ul { list-style-type: none; padding: 0; width: 320px; margin: 20px auto; text-align: left; }
+    li { background: #313244; padding: 10px; margin-bottom: 5px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
+    .delete-btn { background: #f38ba8; color: #11111b; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h2>Custom Whitelist</h2>
+  <input type="text" id="domain-input" placeholder="example.com">
+  <button id="add-btn">Add</button>
+  <ul id="custom-list"></ul>
+  <script src="options.js"></script>
+</body>
+</html>

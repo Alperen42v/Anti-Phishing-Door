@@ -1,0 +1,13 @@
+{
+    "extName": { "message": "Anti-Phishing-Door" },
+    "extDesc": { "message": "基于零信任白名单的防钓鱼护盾。" },
+    "alertMsg": { "message": "⚠️ 不在白名单中！是否继续？" },
+    "urlBox": { "message": "您正尝试访问：" },
+    "rulesTitle": { "message": "安全检查（3条黄金法则）：" },
+    "rule1": { "message": "1. 域名是否有拼写错误？（例如，g00gle.com）" },
+    "rule2": { "message": "2. 这是您预期的页面吗？" },
+    "rule3": { "message": "3. 是否有有效的SSL（HTTPS）证书？" },
+    "btnBack": { "message": "返回安全页面" },
+    "btnProceed": { "message": "仍然继续（我接受风险）" },
+    "unknownUrl": { "message": "未知地址" }
+}

@@ -1,0 +1,13 @@
+{
+    "extName": { "message": "Anti-Phishing-Door" },
+    "extDesc": { "message": "درع مكافحة التصيد المعتمد على القائمة البيضاء بثقة معدومة (Zero Trust)." },
+    "alertMsg": { "message": "⚠️ ليس في القائمة البيضاء! هل تريد المتابعة؟" },
+    "urlBox": { "message": "أنت تحاول زيارة:" },
+    "rulesTitle": { "message": "فحص الأمان (3 قواعد ذهبية):" },
+    "rule1": { "message": "1. هل توجد أخطاء إملائية في النطاق؟ (مثل g00gle.com)" },
+    "rule2": { "message": "2. هل هذه هي الصفحة التي تتوقعها؟" },
+    "rule3": { "message": "3. هل توجد شهادة SSL (HTTPS) صالحة؟" },
+    "btnBack": { "message": "العودة إلى الأمان" },
+    "btnProceed": { "message": "المتابعة على أي حال (أنا أقبل المخاطرة)" },
+    "unknownUrl": { "message": "عنوان غير معروف" }
+}

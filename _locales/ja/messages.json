@@ -1,0 +1,13 @@
+{
+    "extName": { "message": "Anti-Phishing-Door" },
+    "extDesc": { "message": "ゼロトラスト・ホワイトリストベースのアンチフィッシングシールド。" },
+    "alertMsg": { "message": "⚠️ ホワイトリストにありません！続行しますか？" },
+    "urlBox": { "message": "アクセスしようとしているURL:" },
+    "rulesTitle": { "message": "セキュリティチェック（3つのゴールデンルール）:" },
+    "rule1": { "message": "1. ドメインにスペルミスはありませんか？（例: g00gle.com）" },
+    "rule2": { "message": "2. これは期待したページですか？" },
+    "rule3": { "message": "3. 有効なSSL（HTTPS）証明書はありますか？" },
+    "btnBack": { "message": "安全なページに戻る" },
+    "btnProceed": { "message": "とにかく続行する（リスクを承知しました）" },
+    "unknownUrl": { "message": "不明なアドレス" }
+}

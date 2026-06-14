@@ -1,0 +1,13 @@
+{
+	"extName": { "message": "Anti-Phishing-Door" },
+	"extDesc": { "message": "Zero Trust Whitelist based anti-phishing shield." },
+	"alertMsg": { "message": "⚠️ NOT IN WHITELIST! PROCEED?" },
+	"urlBox": { "message": "You are trying to visit:" },
+	"rulesTitle": { "message": "Security Check (3 Golden Rules):" },
+	"rule1": { "message": "1. Any typos in the domain? (e.g., g00gle.com)" },
+	"rule2": { "message": "2. Is this the page you expected?" },
+	"rule3": { "message": "3. Is there a valid SSL (HTTPS) certificate?" },
+	"btnBack": { "message": "Return to Safety" },
+	"btnProceed": { "message": "Proceed Anyway (I Accept the Risk)" },
+	"unknownUrl": { "message": "Unknown Address" }
+}

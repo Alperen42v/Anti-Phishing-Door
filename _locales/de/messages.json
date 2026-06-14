@@ -1,0 +1,13 @@
+{
+    "extName": { "message": "Anti-Phishing-Door" },
+    "extDesc": { "message": "Zero-Trust-Whitelist-basiertes Anti-Phishing-Schild." },
+    "alertMsg": { "message": "⚠️ NICHT AUF DER WHITELIST! FORTFAHREN?" },
+    "urlBox": { "message": "Sie versuchen zu besuchen:" },
+    "rulesTitle": { "message": "Sicherheitscheck (3 goldene Regeln):" },
+    "rule1": { "message": "1. Gibt es Tippfehler in der Domain? (z.B. g00gle.com)" },
+    "rule2": { "message": "2. Ist das die Seite, die Sie erwartet haben?" },
+    "rule3": { "message": "3. Gibt es ein gültiges SSL (HTTPS)-Zertifikat?" },
+    "btnBack": { "message": "Zurück in die Sicherheit" },
+    "btnProceed": { "message": "Trotzdem fortfahren (Ich akzeptiere das Risiko)" },
+    "unknownUrl": { "message": "Unbekannte Adresse" }
+}
