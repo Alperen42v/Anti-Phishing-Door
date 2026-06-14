@@ -1,24 +1,313 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Anti-Phishing-Door | Settings</title>
   <style>
-    body { background-color: #1e1e2e; color: #cdd6f4; font-family: monospace; padding: 30px; text-align: center; }
-    h2 { color: #f9e2af; }
-    input { background: #313244; color: #cdd6f4; border: 1px solid #89b4fa; padding: 10px; width: 250px; border-radius: 4px; }
-    button { background: #89b4fa; color: #11111b; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 4px; margin-left: 10px; }
-    button:hover { opacity: 0.8; }
-    ul { list-style-type: none; padding: 0; width: 320px; margin: 20px auto; text-align: left; }
-    li { background: #313244; padding: 10px; margin-bottom: 5px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
-    .delete-btn { background: #f38ba8; color: #11111b; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+    :root {
+      --bg: #eff1f5;
+      --surface: #e6e9ef;
+      --surface-2: #dce0e8;
+      --border: #ccd0da;
+      --text: #4c4f69;
+      --text-muted: #6c6f85;
+      --accent: #1e66f5;
+      --accent-text: #eff1f5;
+      --warn: #fe640b;
+      --danger: #d20f39;
+      --danger-text: #eff1f5;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1e1e2e;
+        --surface: #313244;
+        --surface-2: #45475a;
+        --border: #45475a;
+        --text: #cdd6f4;
+        --text-muted: #a6adc8;
+        --accent: #89b4fa;
+        --accent-text: #11111b;
+        --warn: #f9e2af;
+        --danger: #f38ba8;
+        --danger-text: #11111b;
+      }
+    }
+
+    html[data-theme="light"] {
+      --bg: #eff1f5;
+      --surface: #e6e9ef;
+      --surface-2: #dce0e8;
+      --border: #ccd0da;
+      --text: #4c4f69;
+      --text-muted: #6c6f85;
+      --accent: #1e66f5;
+      --accent-text: #eff1f5;
+      --warn: #fe640b;
+      --danger: #d20f39;
+      --danger-text: #eff1f5;
+    }
+
+    html[data-theme="dark"] {
+      --bg: #1e1e2e;
+      --surface: #313244;
+      --surface-2: #45475a;
+      --border: #45475a;
+      --text: #cdd6f4;
+      --text-muted: #a6adc8;
+      --accent: #89b4fa;
+      --accent-text: #11111b;
+      --warn: #f9e2af;
+      --danger: #f38ba8;
+      --danger-text: #11111b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+      margin: 0;
+      padding: 32px 16px 60px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 480px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    header h1 {
+      font-size: 20px;
+      letter-spacing: 0.5px;
+      margin: 0 0 4px;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+    }
+
+    .card h2 {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0 0 4px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .card .hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin: 0 0 14px;
+      line-height: 1.5;
+    }
+
+    .segmented {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .segmented button {
+      flex: 1 1 auto;
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 9px 12px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+      white-space: nowrap;
+    }
+
+    .segmented button:hover {
+      border-color: var(--accent);
+    }
+
+    .segmented button.active {
+      background: var(--accent);
+      color: var(--accent-text);
+      border-color: var(--accent);
+    }
+
+    .segmented button:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .custom-duration {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .custom-duration.visible {
+      display: flex;
+    }
+
+    .custom-duration input {
+      width: 90px;
+    }
+
+    .custom-duration span {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .add-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .add-row input {
+      flex: 1;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 9px 10px;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 13px;
+    }
+
+    .add-row button {
+      background: var(--accent);
+      color: var(--accent-text);
+      border: none;
+      padding: 9px 16px;
+      font-weight: 700;
+      font-family: inherit;
+      font-size: 13px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: opacity 0.12s ease;
+    }
+
+    .add-row button:hover {
+      opacity: 0.85;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    li {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      padding: 9px 12px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      word-break: break-all;
+    }
+
+    .empty-hint {
+      color: var(--text-muted);
+      font-size: 12px;
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    .delete-btn {
+      background: var(--danger);
+      color: var(--danger-text);
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      margin-left: 10px;
+      flex-shrink: 0;
+      transition: opacity 0.12s ease;
+    }
+
+    .delete-btn:hover {
+      opacity: 0.8;
+    }
   </style>
 </head>
 <body>
-  <h2>Custom Whitelist</h2>
-  <input type="text" id="domain-input" placeholder="example.com">
-  <button id="add-btn">Add</button>
-  <ul id="custom-list"></ul>
+  <div class="page">
+    <header>
+      <h1>🛡️ Anti-Phishing-Door</h1>
+      <p>Settings</p>
+    </header>
+
+    <section class="card">
+      <h2>Appearance</h2>
+      <p class="hint">Theme of the settings page and warning screen.</p>
+      <div class="segmented" id="theme-segmented">
+        <button type="button" data-value="light">Light</button>
+        <button type="button" data-value="dark">Dark</button>
+        <button type="button" data-value="auto">Auto</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Temporary Leave Period</h2>
+      <p class="hint">When you say "Continue" a site opens without being asked again during this time.</p>
+      <div class="segmented" id="bypass-segmented">
+        <button type="button" data-value="5">5 Min</button>
+        <button type="button" data-value="10">10 Min</button>
+        <button type="button" data-value="20">20 Min</button>
+        <button type="button" data-value="-1">infinite</button>
+        <button type="button" data-value="custom">Special</button>
+      </div>
+      <div class="custom-duration" id="custom-duration-row">
+        <input type="number" id="custom-duration-input" min="1" placeholder="örn. 45">
+        <span>dakika</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Special Whitelist</h2>
+      <p class="hint">The domains you add here always open directly.</p>
+      <div class="add-row">
+        <input type="text" id="domain-input" placeholder="example.com">
+        <button type="button" id="add-btn">Add</button>
+      </div>
+      <ul id="custom-list"></ul>
+    </section>
+  </div>
   <script src="options.js"></script>
 </body>
 </html>

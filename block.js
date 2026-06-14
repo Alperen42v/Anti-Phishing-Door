@@ -33,8 +33,7 @@ document.getElementById('proceed').addEventListener('click', () => {
     try {
       let url = new URL(targetUrl);
       if (url.protocol !== "http:" && url.protocol !== "https:") return;
-      
-      let domain = url.hostname.replace(/^www\./, "");
+      let domain = url.hostname.toLowerCase().replace(/^www\./, "");
       browser.runtime.sendMessage({ action: "bypass", domain: domain }).then(() => {
         window.location.href = url.href;
       });

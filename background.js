@@ -1,10 +1,27 @@
 let fileWhitelist = [];
 let customWhitelist = [];
 let whitelistSet = new Set();
-let bypassedDomains = new Set();
+let bypassedDomains = new Map();
+
+const DEFAULT_SETTINGS = { theme: 'auto', bypassDuration: 5 };
+let settings = { ...DEFAULT_SETTINGS };
 
 function updateWhitelistSet() {
-  whitelistSet = new Set([...fileWhitelist, ...customWhitelist]);
+  whitelistSet = new Set(
+    [...fileWhitelist, ...customWhitelist].map(d => d.trim().toLowerCase())
+  );
+}
+
+function getBypassDurationMs() {
+  const minutes = Number(settings.bypassDuration);
+  if (minutes === -1) return Infinity;
+  if (!minutes || minutes <= 0) return DEFAULT_SETTINGS.bypassDuration * 60 * 1000;
+  return minutes * 60 * 1000;
+}
+
+async function loadSettings() {
+  let result = await browser.storage.local.get({ settings: DEFAULT_SETTINGS });
+  settings = { ...DEFAULT_SETTINGS, ...result.settings };
 }
 
 async function loadFileWhitelist() {
@@ -26,19 +43,23 @@ async function loadCustomWhitelist() {
   updateWhitelistSet();
 }
 
-let listsLoadedPromise = Promise.all([loadFileWhitelist(), loadCustomWhitelist()]);
+let listsLoadedPromise = Promise.all([loadFileWhitelist(), loadCustomWhitelist(), loadSettings()]);
 
 browser.storage.onChanged.addListener((changes) => {
   if (changes.customWhitelist) {
     customWhitelist = changes.customWhitelist.newValue || [];
     updateWhitelistSet();
   }
+  if (changes.settings) {
+    settings = { ...DEFAULT_SETTINGS, ...(changes.settings.newValue || {}) };
+  }
 });
 
 browser.runtime.onMessage.addListener((message, sender) => {
   if (sender.id !== browser.runtime.id) return;
   if (message.action === "bypass" && message.domain) {
-    bypassedDomains.add(message.domain);
+    let domain = String(message.domain).toLowerCase();
+    bypassedDomains.set(domain, Date.now() + getBypassDurationMs());
   }
 });
 
@@ -46,14 +67,25 @@ browser.webRequest.onBeforeRequest.addListener(
   async function(details) {
     if (details.type !== "main_frame") return;
 
+    let url;
+    try {
+      url = new URL(details.url);
+    } catch (e) {
+      return;
+    }
+
+    if (url.protocol !== "http:" && url.protocol !== "https:") return;
+
     await listsLoadedPromise;
 
-    let url = new URL(details.url);
-    if (url.protocol === "moz-extension:") return;
-
-    let domain = url.hostname.replace(/^www\./, "");
-
-    if (bypassedDomains.has(domain)) return;
+    let domain = url.hostname.toLowerCase().replace(/^www\./, "");
+    let bypassExpiry = bypassedDomains.get(domain);
+    if (bypassExpiry !== undefined) {
+      if (Date.now() < bypassExpiry) {
+        return;
+      }
+      bypassedDomains.delete(domain);
+    }
 
     let domainParts = domain.split(".");
     let isAllowed = false;
