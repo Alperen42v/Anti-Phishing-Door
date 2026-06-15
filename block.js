@@ -6,6 +6,14 @@ function getMsg(key, fallbackText) {
   return message;
 }
 
+function applyTheme(theme) {
+  if (theme === 'light' || theme === 'dark') {
+    document.documentElement.setAttribute('data-theme', theme);
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+}
+
 document.getElementById('alertMsg').textContent = getMsg("alertMsg", "⚠️ NOT IN WHITELIST! PROCEED?");
 document.getElementById('urlBox').textContent = getMsg("urlBox", "You are trying to visit:");
 document.getElementById('rulesTitle').textContent = getMsg("rulesTitle", "Security Check (3 Golden Rules):");
@@ -40,5 +48,14 @@ document.getElementById('proceed').addEventListener('click', () => {
     } catch (e) {
       console.error(e);
     }
+  }
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const result = await browser.storage.local.get({ settings: { theme: 'auto' } });
+    applyTheme(result.settings.theme);
+  } catch (error) {
+    console.error(error);
   }
 });
