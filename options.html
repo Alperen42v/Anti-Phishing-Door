@@ -268,42 +268,42 @@
 <body>
   <div class="page">
     <header>
-      <h1>🛡️ Anti-Phishing-Door</h1>
-      <p>Settings</p>
+      <h1>🛡️ <span data-i18n="extName">Anti-Phishing-Door</span></h1>
+      <p data-i18n="settingsTitle">Settings</p>
     </header>
 
     <section class="card">
-      <h2>Appearance</h2>
-      <p class="hint">Theme of the settings page and warning screen.</p>
+      <h2 data-i18n="optAppearance">Appearance</h2>
+      <p class="hint" data-i18n="optAppearanceHint">Theme of the settings page and warning screen.</p>
       <div class="segmented" id="theme-segmented">
-        <button type="button" data-value="light">Light</button>
-        <button type="button" data-value="dark">Dark</button>
-        <button type="button" data-value="auto">Auto</button>
+        <button type="button" data-value="light" data-i18n="optLight">Light</button>
+        <button type="button" data-value="dark" data-i18n="optDark">Dark</button>
+        <button type="button" data-value="auto" data-i18n="optAuto">Auto</button>
       </div>
     </section>
 
     <section class="card">
-      <h2>Temporary Leave Period</h2>
-      <p class="hint">When you say "Continue" a site opens without being asked again during this time.</p>
+      <h2 data-i18n="optBypassPeriod">Temporary Leave Period</h2>
+      <p class="hint" data-i18n="optBypassHint">When you say "Continue" a site opens without being asked again during this time.</p>
       <div class="segmented" id="bypass-segmented">
-        <button type="button" data-value="5">5 Min</button>
-        <button type="button" data-value="10">10 Min</button>
-        <button type="button" data-value="20">20 Min</button>
-        <button type="button" data-value="-1">infinite</button>
-        <button type="button" data-value="custom">Special</button>
+        <button type="button" data-value="5">5 <span data-i18n="optMin">Min</span></button>
+        <button type="button" data-value="10">10 <span data-i18n="optMin">Min</span></button>
+        <button type="button" data-value="20">20 <span data-i18n="optMin">Min</span></button>
+        <button type="button" data-value="-1" data-i18n="optInfinite">infinite</button>
+        <button type="button" data-value="custom" data-i18n="optSpecial">Special</button>
       </div>
       <div class="custom-duration" id="custom-duration-row">
-        <input type="number" id="custom-duration-input" min="1" placeholder="örn. 45">
-        <span>dakika</span>
+        <input type="number" id="custom-duration-input" min="1">
+        <span data-i18n="optMinutes">dakika</span>
       </div>
     </section>
 
     <section class="card">
-      <h2>Special Whitelist</h2>
-      <p class="hint">The domains you add here always open directly.</p>
+      <h2 data-i18n="optWhitelist">Special Whitelist</h2>
+      <p class="hint" data-i18n="optWhitelistHint">The domains you add here always open directly.</p>
       <div class="add-row">
         <input type="text" id="domain-input" placeholder="example.com">
-        <button type="button" id="add-btn">Add</button>
+        <button type="button" id="add-btn" data-i18n="optAdd">Add</button>
       </div>
       <ul id="custom-list"></ul>
     </section>

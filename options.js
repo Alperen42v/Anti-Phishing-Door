@@ -31,6 +31,20 @@ function saveSettings() {
   browser.storage.local.set({ settings });
 }
 
+function localizePage() {
+  document.querySelectorAll('[data-i18n]').forEach((elem) => {
+    const key = elem.dataset.i18n;
+    const message = browser.i18n.getMessage(key);
+    if (message) {
+      elem.textContent = message;
+    }
+  });
+  
+  if (customDurationInput) {
+    customDurationInput.placeholder = browser.i18n.getMessage('optCustomPlaceholder');
+  }
+}
+
 async function loadSettings() {
   const result = await browser.storage.local.get({ settings: DEFAULT_SETTINGS });
   settings = { ...DEFAULT_SETTINGS, ...result.settings };
@@ -97,7 +111,7 @@ function loadCustomDomains() {
       empty.style.background = 'transparent';
       empty.style.border = 'none';
       empty.style.justifyContent = 'center';
-      empty.textContent = 'There is no domain added yet.';
+      empty.textContent = browser.i18n.getMessage('optNoDomains');
       customList.appendChild(empty);
       return;
     }
@@ -109,7 +123,7 @@ function loadCustomDomains() {
       li.appendChild(label);
 
       const delBtn = document.createElement('button');
-      delBtn.textContent = 'Sil';
+      delBtn.textContent = browser.i18n.getMessage('optDelete');
       delBtn.className = 'delete-btn';
       delBtn.addEventListener('click', () => {
         removeDomain(domain);
@@ -151,6 +165,7 @@ domainInput.addEventListener('keydown', (e) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+  localizePage();
   loadSettings();
   loadCustomDomains();
 });
