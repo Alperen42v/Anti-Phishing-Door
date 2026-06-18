@@ -168,4 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
   localizePage();
   loadSettings();
   loadCustomDomains();
+  const manifest = browser.runtime.getManifest();
+  const versionEl = document.getElementById('ext-version');
+  if (versionEl) versionEl.textContent = 'v' + manifest.version;
 });
