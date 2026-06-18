@@ -1,97 +1,299 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Anti-Phishing-Door | Erişim Engellendi</title>
+  <title>Anti-Phishing-Door | Blocked</title>
   <style>
     :root {
-      --bg: #eff1f5;
-      --text: #4c4f69;
-      --surface: #e6e9ef;
-      --danger: #d20f39;
-      --danger-text: #eff1f5;
-      --accent: #1e66f5;
-      --accent-text: #eff1f5;
-      --warn: #fe640b;
-      --rules-bg: #ccd0da;
-      --target-text: #40a02b;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #1e1e2e;
-        --text: #cdd6f4;
-        --surface: #313244;
-        --danger: #f38ba8;
-        --danger-text: #11111b;
-        --accent: #89b4fa;
-        --accent-text: #11111b;
-        --warn: #f9e2af;
-        --rules-bg: #181825;
-        --target-text: #a6e3a1;
-      }
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-2: #0d1117;
+      --border: #30363d;
+      --text-muted: #6e7681;
+      --header-bg: #1a0a0f;
+      --header-border: #b91c1c;
+      --header-text: #f87171;
+      --icon-bg: #dc2626;
+      --url-text: #39d353;
+      --warn-border: #ca8a04;
+      --warn-bg: #1c1500;
+      --warn-title: #fde68a;
+      --warn-text: #d4b96a;
+      --warn-rule-border: #292115;
+      --num-bg: #2a1e00;
+      --num-text: #fbbf24;
+      --safe-bg: #052e16;
+      --safe-border: #16a34a;
+      --safe-text: #4ade80;
+      --danger-bg: #1a0a0f;
+      --danger-border: #dc2626;
+      --danger-text: #f87171;
     }
 
     html[data-theme="light"] {
-      --bg: #eff1f5;
-      --text: #4c4f69;
-      --surface: #e6e9ef;
-      --danger: #d20f39;
-      --danger-text: #eff1f5;
-      --accent: #1e66f5;
-      --accent-text: #eff1f5;
-      --warn: #fe640b;
-      --rules-bg: #ccd0da;
-      --target-text: #40a02b;
+      --bg: #f5f5f4;
+      --surface: #ffffff;
+      --surface-2: #f0efed;
+      --border: #d1d5db;
+      --text-muted: #9ca3af;
+      --header-bg: #fff1f2;
+      --header-border: #fca5a5;
+      --header-text: #b91c1c;
+      --icon-bg: #dc2626;
+      --url-text: #15803d;
+      --warn-border: #ca8a04;
+      --warn-bg: #fefce8;
+      --warn-title: #854d0e;
+      --warn-text: #78350f;
+      --warn-rule-border: #fef9c3;
+      --num-bg: #fef9c3;
+      --num-text: #854d0e;
+      --safe-bg: #f0fdf4;
+      --safe-border: #16a34a;
+      --safe-text: #15803d;
+      --danger-bg: #fff1f2;
+      --danger-border: #dc2626;
+      --danger-text: #b91c1c;
     }
 
-    html[data-theme="dark"] {
-      --bg: #1e1e2e;
-      --text: #cdd6f4;
-      --surface: #313244;
-      --danger: #f38ba8;
-      --danger-text: #11111b;
-      --accent: #89b4fa;
-      --accent-text: #11111b;
-      --warn: #f9e2af;
-      --rules-bg: #181825;
-      --target-text: #a6e3a1;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      font-family: monospace;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
     }
 
-    body { background-color: var(--bg); color: var(--text); font-family: monospace; text-align: center; padding: 50px; }
-    .alert { color: var(--danger); font-size: 28px; font-weight: bold; margin-bottom: 20px;}
-    .url-box { background: var(--surface); padding: 15px; margin: 20px auto; width: 60%; border-radius: 8px; border: 1px solid var(--danger); }
-    #target-url { color: var(--target-text); font-size: 18px; word-break: break-all; }
-    .rules { text-align: left; display: inline-block; background: var(--rules-bg); padding: 25px; border-radius: 8px; margin-top: 20px;}
-    .rules h3 { color: var(--warn); margin-top: 0;}
-    .rules li { margin-bottom: 10px; font-size: 16px;}
-    button { background: var(--accent); color: var(--accent-text); border: none; padding: 12px 24px; cursor: pointer; font-weight: bold; margin: 20px 10px; border-radius: 4px;}
-    button.danger { background: var(--danger); color: var(--danger-text); }
-    button:hover { opacity: 0.8; }
+    .card {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 560px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--header-border);
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--icon-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .header-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .header-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--header-text);
+    }
+
+    .header-sub {
+      font-size: 11px;
+      color: var(--header-text);
+      opacity: 0.55;
+      margin-top: 2px;
+    }
+
+    .card-body {
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .url-block {
+      background: var(--surface-2);
+      border: 0.5px solid var(--border);
+      border-radius: 8px;
+      padding: 0.7rem 1rem;
+    }
+
+    .url-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 5px;
+    }
+
+    .url-value {
+      font-size: 13px;
+      color: var(--url-text);
+      word-break: break-all;
+    }
+
+    .rules-block {
+      border: 1px solid var(--warn-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .rules-header {
+      background: var(--warn-bg);
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rules-header svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--warn-title);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    .rules-title {
+      font-size: 12px;
+      font-weight: bold;
+      color: var(--warn-title);
+    }
+
+    .rule-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 0.55rem 1rem;
+      border-top: 0.5px solid var(--warn-rule-border);
+      font-size: 12px;
+      color: var(--warn-text);
+      line-height: 1.5;
+      background: var(--warn-bg);
+    }
+
+    .rule-num {
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--num-bg);
+      color: var(--num-text);
+      font-size: 10px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    button {
+      flex: 1;
+      padding: 0.6rem 0.875rem;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      font-family: monospace;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: opacity 0.15s;
+    }
+
+    button svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    button.safe {
+      background: var(--safe-bg);
+      border: 1px solid var(--safe-border);
+      color: var(--safe-text);
+    }
+
+    button.danger {
+      background: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+      color: var(--danger-text);
+    }
+
+    button:hover { opacity: 0.75; }
   </style>
 </head>
 <body>
-<div class="alert" id="alertMsg"></div>
-  
-  <div class="url-box">
-    <span id="urlBox"></span><br><br>
-    <span id="target-url"></span>
+
+<div class="card">
+  <div class="card-header">
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </div>
+    <div>
+      <div class="header-title" id="alertMsg"></div>
+      <div class="header-sub">Anti-Phishing-Door</div>
+    </div>
   </div>
 
-  <div class="rules">
-    <h3 id="rulesTitle"></h3>
-    <ul>
-      <li id="rule1"></li>
-      <li id="rule2"></li>
-      <li id="rule3"></li>
-    </ul>
+  <div class="card-body">
+    <div class="url-block">
+      <div class="url-label" id="urlBox"></div>
+      <div class="url-value" id="target-url"></div>
+    </div>
+
+    <div class="rules-block">
+      <div class="rules-header">
+        <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span class="rules-title" id="rulesTitle"></span>
+      </div>
+      <div class="rule-item"><div class="rule-num">1</div><span id="rule1"></span></div>
+      <div class="rule-item"><div class="rule-num">2</div><span id="rule2"></span></div>
+      <div class="rule-item"><div class="rule-num">3</div><span id="rule3"></span></div>
+    </div>
+
+    <div class="actions">
+      <button class="safe" id="go-back">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        <span></span>
+      </button>
+      <button class="danger" id="proceed">
+        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span></span>
+      </button>
+    </div>
   </div>
-  
-  <br>
-  <button id="go-back"></button>
-  <button id="proceed" class="danger"></button>
+</div>
 
-  <script src="block.js"></script>
-
+<script src="block.js"></script>
 </body>
 </html>
