@@ -27,5 +27,25 @@
   "optWhitelistHint": { "message": "Buraya eklediğiniz alan adları her zaman doğrudan açılır." },
   "optAdd": { "message": "Ekle" },
   "optNoDomains": { "message": "Henüz eklenmiş bir alan adı yok." },
-  "optDelete": { "message": "Sil" }
+  "optDelete": { "message": "Sil" },
+  "alertMsgHighRisk": { "message": "Olası Oltalama (Phishing) Girişimi" },
+  "checkPunycodeTitle": { "message": "Punycode Kontrolü" },
+  "checkPunycodePass": { "message": "Gizlenmiş karakter tespit edilmedi" },
+  "checkPunycodeFail": { "message": "Gizlenmiş karakter kodlaması tespit edildi" },
+  "checkScriptTitle": { "message": "Alfabe Tutarlılığı" },
+  "checkScriptPass": { "message": "Tek bir karakter seti kullanılmış" },
+  "checkScriptFail": { "message": "Alan adında karışık alfabe tespit edildi" },
+  "checkSimilarTitle": { "message": "Beyaz Liste Benzerliği" },
+  "checkSimilarPass": { "message": "Yakın bir eşleşme bulunamadı" },
+  "checkSimilarFail": { "message": "Güvenilir bir alan adına neredeyse aynı" },
+  "checkSimilarFailWithDomain": { "message": "Şuna neredeyse aynı:" },
+  "btnProceedSmall": { "message": "riski kabul et ve devam et" },
+  "optImportExport": { "message": "İçe / Dışa Aktar" },
+  "optImportExportHint": { "message": "Özel beyaz listenizi yedekleyin veya başka bir cihaza yükleyin." },
+  "optExportJson": { "message": "JSON Olarak Dışa Aktar" },
+  "optExportTxt": { "message": "TXT Olarak Dışa Aktar" },
+  "optImport": { "message": "İçe Aktar" },
+  "optImportSuccess": { "message": "Alan adları başarıyla içe aktarıldı" },
+  "optImportError": { "message": "Dosya okunamadı" }
+
 }
