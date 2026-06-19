@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Anti-Phishing-Door | High Risk Blocked</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-2: #0d1117;
+      --border: #30363d;
+      --check-border: #21262d;
+      --text-muted: #6e7681;
+      --header-bg: #1a0a0f;
+      --header-border: #b91c1c;
+      --header-text: #f87171;
+      --icon-bg: #dc2626;
+      --url-text: #39d353;
+      --pass-bg: #052e16;
+      --pass-icon: #4ade80;
+      --fail-bg: #2a0a0a;
+      --fail-icon: #f87171;
+      --check-title: #e6edf3;
+      --check-desc: #8b949e;
+      --safe-bg: #16a34a;
+      --safe-border: #22c55e;
+      --safe-text: #052e16;
+      --danger-text: #6b6a67;
+      --card-glow: rgba(220, 38, 38, 0.3);
+    }
+
+    html[data-theme="light"] {
+      --bg: #f5f5f4;
+      --surface: #ffffff;
+      --surface-2: #f0efed;
+      --border: #d1d5db;
+      --check-border: #e5e7eb;
+      --text-muted: #9ca3af;
+      --header-bg: #fff1f2;
+      --header-border: #fca5a5;
+      --header-text: #b91c1c;
+      --icon-bg: #dc2626;
+      --url-text: #15803d;
+      --pass-bg: #f0fdf4;
+      --pass-icon: #16a34a;
+      --fail-bg: #fef2f2;
+      --fail-icon: #dc2626;
+      --check-title: #1c1b1a;
+      --check-desc: #6b7280;
+      --safe-bg: #16a34a;
+      --safe-border: #15803d;
+      --safe-text: #ffffff;
+      --danger-text: #9ca3af;
+      --card-glow: rgba(220, 38, 38, 0.15);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      font-family: monospace;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--header-border);
+      box-shadow: 0 0 0 1px var(--card-glow);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 520px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--header-border);
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--icon-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.65; }
+    }
+
+    .header-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .header-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--header-text);
+    }
+
+    .header-sub {
+      font-size: 11px;
+      color: var(--header-text);
+      opacity: 0.55;
+      margin-top: 2px;
+    }
+
+    .card-body {
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .url-block {
+      background: var(--surface-2);
+      border: 0.5px solid var(--border);
+      border-radius: 8px;
+      padding: 0.7rem 1rem;
+    }
+
+    .url-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 5px;
+    }
+
+    .url-value {
+      font-size: 13px;
+      color: var(--url-text);
+      word-break: break-all;
+    }
+
+    .checks-block {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.6rem 1rem;
+      border-top: 0.5px solid var(--check-border);
+    }
+
+    .check-item:first-child { border-top: none; }
+
+    .check-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .check-icon.pass { background: var(--pass-bg); }
+    .check-icon.fail { background: var(--fail-bg); }
+
+    .check-icon svg {
+      width: 12px;
+      height: 12px;
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .check-icon.pass svg { stroke: var(--pass-icon); }
+    .check-icon.fail svg { stroke: var(--fail-icon); }
+
+    .check-text strong {
+      display: block;
+      color: var(--check-title);
+      font-size: 12.5px;
+    }
+
+    .check-text span {
+      color: var(--check-desc);
+      font-size: 11px;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding-top: 0.25rem;
+    }
+
+    #go-back {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      font-family: monospace;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--safe-bg);
+      border: 1px solid var(--safe-border);
+      color: var(--safe-text);
+      transition: opacity 0.15s;
+    }
+
+    #go-back svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    #go-back:hover { opacity: 0.85; }
+
+    #proceed {
+      background: none;
+      border: none;
+      font-family: monospace;
+      font-size: 10px;
+      color: var(--danger-text);
+      text-decoration: underline;
+      opacity: 0.55;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    #proceed:hover { opacity: 0.85; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="card-header">
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </div>
+    <div>
+      <div class="header-title" id="alertMsg"></div>
+      <div class="header-sub">Anti-Phishing-Door</div>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="url-block">
+      <div class="url-label" id="urlBox"></div>
+      <div class="url-value" id="target-url"></div>
+    </div>
+
+    <div class="checks-block" id="checks-block"></div>
+
+    <div class="actions">
+      <button id="go-back">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        <span id="backText"></span>
+      </button>
+      <button id="proceed">
+        <span id="proceedText"></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="block-highrisk.js"></script>
+</body>
+</html>
