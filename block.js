@@ -31,18 +31,39 @@ const isHttpsFlag = urlParams.get("isHttps") === "1";
 
 document.getElementById("target-url").textContent = targetUrl || getMsg("unknownUrl", "Unknown address");
 
-function checkIconSvg(passed) {
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+function buildCheckSvg(passed) {
+  const svg = document.createElementNS(SVG_NS, "svg");
+  svg.setAttribute("viewBox", "0 0 24 24");
+
   if (passed) {
-    return '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+    const polyline = document.createElementNS(SVG_NS, "polyline");
+    polyline.setAttribute("points", "20 6 9 17 4 12");
+    svg.appendChild(polyline);
+  } else {
+    const line1 = document.createElementNS(SVG_NS, "line");
+    line1.setAttribute("x1", "18");
+    line1.setAttribute("y1", "6");
+    line1.setAttribute("x2", "6");
+    line1.setAttribute("y2", "18");
+    const line2 = document.createElementNS(SVG_NS, "line");
+    line2.setAttribute("x1", "6");
+    line2.setAttribute("y1", "6");
+    line2.setAttribute("x2", "18");
+    line2.setAttribute("y2", "18");
+    svg.appendChild(line1);
+    svg.appendChild(line2);
   }
-  return '<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+
+  return svg;
 }
 
 function renderRuleCheck(elementId, passed) {
   const el = document.getElementById(elementId);
   if (!el) return;
   el.classList.add(passed ? "pass" : "fail");
-  el.innerHTML = checkIconSvg(passed);
+  el.appendChild(buildCheckSvg(passed));
 }
 
 renderRuleCheck("rule1-check", !punycodeFlag && !mixedScriptFlag && !similarFlag);

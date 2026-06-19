@@ -108,7 +108,7 @@ customDurationInput.addEventListener('input', () => {
 
 function loadCustomDomains() {
   browser.storage.local.get({ customWhitelist: [] }).then((result) => {
-    customList.innerHTML = '';
+    customList.replaceChildren();
 
     if (result.customWhitelist.length === 0) {
       const empty = document.createElement('li');
