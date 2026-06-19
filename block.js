@@ -24,8 +24,29 @@ document.querySelector("#proceed span").textContent = getMsg("btnProceed", "Proc
 
 const urlParams = new URLSearchParams(window.location.search);
 const targetUrl = urlParams.get("target");
+const punycodeFlag = urlParams.get("punycode") === "1";
+const mixedScriptFlag = urlParams.get("mixedScript") === "1";
+const similarFlag = urlParams.get("similar") === "1";
+const isHttpsFlag = urlParams.get("isHttps") === "1";
 
 document.getElementById("target-url").textContent = targetUrl || getMsg("unknownUrl", "Unknown address");
+
+function checkIconSvg(passed) {
+  if (passed) {
+    return '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+  }
+  return '<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+}
+
+function renderRuleCheck(elementId, passed) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  el.classList.add(passed ? "pass" : "fail");
+  el.innerHTML = checkIconSvg(passed);
+}
+
+renderRuleCheck("rule1-check", !punycodeFlag && !mixedScriptFlag && !similarFlag);
+renderRuleCheck("rule3-check", isHttpsFlag);
 
 document.getElementById("go-back").addEventListener("click", () => {
   window.history.back();

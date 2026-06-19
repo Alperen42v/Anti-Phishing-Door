@@ -191,6 +191,46 @@
       background: var(--warn-bg);
     }
 
+    .rule-text {
+      flex: 1;
+    }
+
+    .rule-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .rule-check svg {
+      width: 11px;
+      height: 11px;
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .rule-check.pass {
+      background: var(--safe-bg);
+    }
+
+    .rule-check.pass svg {
+      stroke: var(--safe-text);
+    }
+
+    .rule-check.fail {
+      background: var(--danger-bg);
+    }
+
+    .rule-check.fail svg {
+      stroke: var(--danger-text);
+    }
+
     .rule-num {
       min-width: 18px;
       height: 18px;
@@ -276,9 +316,20 @@
         <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         <span class="rules-title" id="rulesTitle"></span>
       </div>
-      <div class="rule-item"><div class="rule-num">1</div><span id="rule1"></span></div>
-      <div class="rule-item"><div class="rule-num">2</div><span id="rule2"></span></div>
-      <div class="rule-item"><div class="rule-num">3</div><span id="rule3"></span></div>
+      <div class="rule-item">
+        <div class="rule-num">1</div>
+        <span class="rule-text" id="rule1"></span>
+        <div class="rule-check" id="rule1-check"></div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num">2</div>
+        <span class="rule-text" id="rule2"></span>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num">3</div>
+        <span class="rule-text" id="rule3"></span>
+        <div class="rule-check" id="rule3-check"></div>
+      </div>
     </div>
 
     <div class="actions">

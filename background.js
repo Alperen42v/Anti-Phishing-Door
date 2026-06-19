@@ -195,6 +195,7 @@ browser.webRequest.onBeforeRequest.addListener(
       if (analysis.riskFlags.similarDomain) {
         params.set("similarTo", analysis.riskFlags.similarDomain);
       }
+      params.set("isHttps", url.protocol === "https:" ? "1" : "0");
       let page = analysis.highRisk ? "block-highrisk.html" : "block.html";
       let blockUrl = browser.runtime.getURL(`${page}?${params.toString()}`);
       return { redirectUrl: blockUrl };
