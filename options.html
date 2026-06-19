@@ -263,6 +263,44 @@
     .delete-btn:hover {
       opacity: 0.8;
     }
+
+    .io-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .io-row button {
+      flex: 1;
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 9px 12px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: opacity 0.12s ease, border-color 0.12s ease;
+    }
+
+    .io-row button:hover {
+      border-color: var(--accent);
+      opacity: 0.9;
+    }
+
+    .io-status {
+      font-size: 12px;
+      margin-top: 10px;
+      min-height: 16px;
+    }
+
+    .io-status.success {
+      color: var(--accent);
+    }
+
+    .io-status.error {
+      color: var(--danger);
+    }
   </style>
 </head>
 <body>
@@ -307,6 +345,18 @@
         <button type="button" id="add-btn" data-i18n="optAdd">Add</button>
       </div>
       <ul id="custom-list"></ul>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="optImportExport">Import / Export</h2>
+      <p class="hint" data-i18n="optImportExportHint">Back up your custom whitelist or load it on another device.</p>
+      <div class="io-row">
+        <button type="button" id="export-json-btn" data-i18n="optExportJson">Export JSON</button>
+        <button type="button" id="export-txt-btn" data-i18n="optExportTxt">Export TXT</button>
+        <button type="button" id="import-btn" data-i18n="optImport">Import</button>
+      </div>
+      <input type="file" id="import-file-input" accept=".json,.txt" style="display:none;">
+      <p class="io-status" id="io-status"></p>
     </section>
   </div>
   <script src="options.js"></script>

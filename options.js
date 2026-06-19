@@ -10,6 +10,11 @@ const addBtn = document.getElementById('add-btn');
 const customList = document.getElementById('custom-list');
 const customDurationRow = document.getElementById('custom-duration-row');
 const customDurationInput = document.getElementById('custom-duration-input');
+const exportJsonBtn = document.getElementById('export-json-btn');
+const exportTxtBtn = document.getElementById('export-txt-btn');
+const importBtn = document.getElementById('import-btn');
+const importFileInput = document.getElementById('import-file-input');
+const ioStatus = document.getElementById('io-status');
 
 let settings = { ...DEFAULT_SETTINGS };
 
@@ -162,6 +167,88 @@ domainInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     addBtn.click();
   }
+});
+
+function showIoStatus(message, isError) {
+  ioStatus.textContent = message;
+  ioStatus.className = 'io-status ' + (isError ? 'error' : 'success');
+  setTimeout(() => {
+    ioStatus.textContent = '';
+    ioStatus.className = 'io-status';
+  }, 4000);
+}
+
+function downloadFile(filename, content, mimeType) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+exportJsonBtn.addEventListener('click', () => {
+  browser.storage.local.get({ customWhitelist: [] }).then((result) => {
+    const json = JSON.stringify({ customWhitelist: result.customWhitelist }, null, 2);
+    downloadFile('anti-phishing-door-whitelist.json', json, 'application/json');
+  });
+});
+
+exportTxtBtn.addEventListener('click', () => {
+  browser.storage.local.get({ customWhitelist: [] }).then((result) => {
+    const txt = result.customWhitelist.join('\n');
+    downloadFile('anti-phishing-door-whitelist.txt', txt, 'text/plain');
+  });
+});
+
+function parseImportedContent(filename, text) {
+  const isJson = filename.toLowerCase().endsWith('.json');
+  if (isJson) {
+    const parsed = JSON.parse(text);
+    if (Array.isArray(parsed)) return parsed;
+    if (parsed && Array.isArray(parsed.customWhitelist)) return parsed.customWhitelist;
+    throw new Error('invalid json structure');
+  }
+  return text.split('\n').map((line) => line.trim()).filter((line) => line.length > 0);
+}
+
+importBtn.addEventListener('click', () => {
+  importFileInput.click();
+});
+
+importFileInput.addEventListener('change', () => {
+  const file = importFileInput.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const imported = parseImportedContent(file.name, reader.result)
+        .map((d) => String(d).trim().toLowerCase())
+        .filter((d) => d.length > 0);
+
+      browser.storage.local.get({ customWhitelist: [] }).then((result) => {
+        const merged = Array.from(new Set([...result.customWhitelist, ...imported]));
+        browser.storage.local.set({ customWhitelist: merged }).then(() => {
+          loadCustomDomains();
+          showIoStatus(browser.i18n.getMessage('optImportSuccess') || ('Imported ' + imported.length + ' domains'), false);
+        });
+      });
+    } catch (error) {
+      console.error(error);
+      showIoStatus(browser.i18n.getMessage('optImportError') || 'Could not read file', true);
+    } finally {
+      importFileInput.value = '';
+    }
+  };
+  reader.onerror = () => {
+    showIoStatus(browser.i18n.getMessage('optImportError') || 'Could not read file', true);
+    importFileInput.value = '';
+  };
+  reader.readAsText(file);
 });
 
 document.addEventListener('DOMContentLoaded', () => {
