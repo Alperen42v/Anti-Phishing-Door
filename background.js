@@ -6,24 +6,26 @@ let bypassedDomains = new Map();
 const DEFAULT_SETTINGS = { theme: 'auto', bypassDuration: 5 };
 let settings = { ...DEFAULT_SETTINGS };
 
-const SCRIPT_RANGES = [
-  { name: 'cyrillic', regex: /[\u0400-\u04FF]/ },
-  { name: 'greek', regex: /[\u0370-\u03FF]/ },
-  { name: 'armenian', regex: /[\u0530-\u058F]/ },
-  { name: 'hebrew', regex: /[\u0590-\u05FF]/ },
-  { name: 'arabic', regex: /[\u0600-\u06FF]/ }
-];
-
 const LATIN_LOOKALIKES = new Set([
   '\u0430', '\u0435', '\u043e', '\u0440', '\u0441', '\u0443', '\u0445',
   '\u0410', '\u0415', '\u041e', '\u0420', '\u0421', '\u0423', '\u0425',
   '\u0456', '\u0406'
 ]);
 
+let whitelistBuckets = new Map();
+
 function updateWhitelistSet() {
   whitelistSet = new Set(
     [...fileWhitelist, ...customWhitelist].map(d => d.trim().toLowerCase())
   );
+  whitelistBuckets = new Map();
+  for (let entry of whitelistSet) {
+    let firstChar = entry.charAt(0);
+    if (!whitelistBuckets.has(firstChar)) {
+      whitelistBuckets.set(firstChar, []);
+    }
+    whitelistBuckets.get(firstChar).push(entry);
+  }
 }
 
 function getBypassDurationMs() {
@@ -77,17 +79,29 @@ browser.runtime.onMessage.addListener((message, sender) => {
   }
 });
 
+let lastBypassCleanup = 0;
+const BYPASS_CLEANUP_INTERVAL_MS = 10 * 60 * 1000;
+
+function cleanupExpiredBypasses() {
+  let now = Date.now();
+  if (now - lastBypassCleanup < BYPASS_CLEANUP_INTERVAL_MS) return;
+  lastBypassCleanup = now;
+  for (let [domain, expiry] of bypassedDomains) {
+    if (expiry !== Infinity && now >= expiry) {
+      bypassedDomains.delete(domain);
+    }
+  }
+}
+
 function isPunycode(hostname) {
   return hostname.split(".").some(label => label.startsWith("xn--"));
 }
 
+const NON_LATIN_SCRIPT_REGEX = /[\u0370-\u03FF\u0400-\u04FF\u0530-\u058F\u0590-\u05FF\u0600-\u06FF]/;
+const LATIN_REGEX = /[a-zA-Z]/;
+
 function detectMixedScript(hostname) {
-  let foundScripts = new Set();
-  if (/[a-zA-Z]/.test(hostname)) foundScripts.add('latin');
-  for (let script of SCRIPT_RANGES) {
-    if (script.regex.test(hostname)) foundScripts.add(script.name);
-  }
-  return foundScripts.size > 1;
+  return LATIN_REGEX.test(hostname) && NON_LATIN_SCRIPT_REGEX.test(hostname);
 }
 
 function hasLookalikeChars(hostname) {
@@ -97,45 +111,63 @@ function hasLookalikeChars(hostname) {
   return false;
 }
 
-function levenshteinDistance(a, b) {
-  let matrix = [];
-  for (let i = 0; i <= b.length; i++) matrix[i] = [i];
-  for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
-  for (let i = 1; i <= b.length; i++) {
-    for (let j = 1; j <= a.length; j++) {
-      if (b.charAt(i - 1) === a.charAt(j - 1)) {
-        matrix[i][j] = matrix[i - 1][j - 1];
+function levenshteinDistance(a, b, maxDistance) {
+  if (Math.abs(a.length - b.length) > maxDistance) return maxDistance + 1;
+
+  let prevRow = new Array(b.length + 1);
+  for (let j = 0; j <= b.length; j++) prevRow[j] = j;
+
+  for (let i = 1; i <= a.length; i++) {
+    let currRow = new Array(b.length + 1);
+    currRow[0] = i;
+    let rowMin = currRow[0];
+
+    for (let j = 1; j <= b.length; j++) {
+      if (a.charAt(i - 1) === b.charAt(j - 1)) {
+        currRow[j] = prevRow[j - 1];
       } else {
-        matrix[i][j] = Math.min(
-          matrix[i - 1][j - 1] + 1,
-          matrix[i][j - 1] + 1,
-          matrix[i - 1][j] + 1
-        );
+        currRow[j] = Math.min(prevRow[j - 1] + 1, currRow[j - 1] + 1, prevRow[j] + 1);
       }
+      if (currRow[j] < rowMin) rowMin = currRow[j];
     }
+
+    if (rowMin > maxDistance) return maxDistance + 1;
+    prevRow = currRow;
   }
-  return matrix[b.length][a.length];
+
+  return prevRow[b.length];
 }
+
+const MAX_SIMILARITY_DISTANCE = 2;
 
 function findClosestWhitelistMatch(domain) {
   let bestMatch = null;
-  let bestDistance = Infinity;
-  for (let entry of whitelistSet) {
-    if (Math.abs(entry.length - domain.length) > 3) continue;
-    let distance = levenshteinDistance(domain, entry);
+  let bestDistance = MAX_SIMILARITY_DISTANCE + 1;
+
+  let firstChar = domain.charAt(0);
+  let candidates = whitelistBuckets.get(firstChar);
+  if (!candidates || candidates.length === 0) {
+    return { domain: null, distance: Infinity };
+  }
+
+  for (let entry of candidates) {
+    if (Math.abs(entry.length - domain.length) > MAX_SIMILARITY_DISTANCE) continue;
+    let distance = levenshteinDistance(domain, entry, bestDistance - 1);
     if (distance < bestDistance) {
       bestDistance = distance;
       bestMatch = entry;
+      if (bestDistance === 0) break;
     }
   }
-  return { domain: bestMatch, distance: bestDistance };
+
+  return { domain: bestMatch, distance: bestDistance > MAX_SIMILARITY_DISTANCE ? Infinity : bestDistance };
 }
 
 function analyzeDomain(hostname) {
   let punycode = isPunycode(hostname);
   let mixedScript = detectMixedScript(hostname) || hasLookalikeChars(hostname);
   let closest = findClosestWhitelistMatch(hostname);
-  let similarToWhitelist = closest.distance > 0 && closest.distance <= 2;
+  let similarToWhitelist = closest.distance > 0 && closest.distance <= MAX_SIMILARITY_DISTANCE;
 
   let riskFlags = {
     punycode,
@@ -163,6 +195,8 @@ browser.webRequest.onBeforeRequest.addListener(
     if (url.protocol !== "http:" && url.protocol !== "https:") return;
 
     await listsLoadedPromise;
+
+    cleanupExpiredBypasses();
 
     let domain = url.hostname.toLowerCase().replace(/^www\./, "");
     let bypassExpiry = bypassedDomains.get(domain);
