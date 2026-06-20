@@ -110,7 +110,19 @@ checksBlock.appendChild(buildCheckItem(
 ));
 
 document.getElementById("go-back").addEventListener("click", () => {
-  window.history.back();
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    browser.tabs.getCurrent().then((tab) => {
+      if (tab && tab.id !== undefined) {
+        browser.tabs.remove(tab.id);
+      } else {
+        window.close();
+      }
+    }).catch(() => {
+      window.close();
+    });
+  }
 });
 
 document.getElementById("proceed").addEventListener("click", () => {
